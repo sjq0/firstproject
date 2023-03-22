@@ -1,9 +1,13 @@
 <script setup>
 import { ref , reactive , onMounted } from 'vue'
-import { getStudent , addStudent , deleteStudent } from '../api/student'
+import { getStudent , addStudent , deleteStudent , updateStudent , deleteOneStudent } from '../api/student'
 
 const dialogFormVisible = ref(false)
 const formLabelWidth = '80px'
+
+let status = ref(null)
+
+let id = ref(null)
 
 const form = reactive({
   name: '',
@@ -15,24 +19,65 @@ const form = reactive({
 
 let ids = ref([])
 
+let deleteid = ref(null)
+
 const tableData = ref([])
 
-let handleClick = () => {
-  console.log('修改数据')
+let handleClick = (index,row) => {
+  dialogFormVisible.value = true
+  status.value = 2
+  id.value = index + 1
+}
+
+let handleDelete = (index,row) => {
+  // console.log(index);
+  deleteid.value = index + 1
+  console.log(deleteid.value);
+  deleteOneStudent(deleteid.value).then(
+    res => {
+      console.log(res);
+    },
+    err => {
+      console.log('这是一个错误'+err);
+    }
+  )
+}
+
+let adds = () => {
+  dialogFormVisible.value = true
+  status.value = 1
 }
 
 let submit = () => {
   dialogFormVisible.value = false
   let student = form
-  addStudent(student).then(
-    res => {
-      // console.log(res);
-      window.location.reload();
-    },
-    err => {
-      console.log(err);
-    }
-  )
+  // console.log(student);
+  if (status.value == 1) {
+    // console.log('这是添加');
+    addStudent(student).then(
+      res => {
+        // console.log(res);
+        window.location.reload();
+      },
+      err => {
+        console.log(err);
+      }
+    )
+  }
+
+  if (status.value == 2) {
+    // console.log('这是修改');
+    updateStudent(id.value,student).then(
+      res => {
+        console.log(res);
+        window.location.reload();
+      },
+      err => {
+        console.log(err);
+      }
+    )
+  }
+  
 }
 
 let changes = (selection) => {
@@ -82,7 +127,7 @@ onMounted(() => {
 <template>
   <div>
     <div>
-        <el-button type="primary" @click="dialogFormVisible = true">添加</el-button>
+        <el-button type="primary" @click="adds">添加</el-button>
         <el-button type="danger" @click="deletechange(ids)">批量删除</el-button>
     </div>
     <div>
@@ -124,10 +169,10 @@ onMounted(() => {
             <el-table-column prop="address" label="Address" width="300" />
             <el-table-column prop="date" label="Date" width="150" />
             <el-table-column fixed="right" label="Operations" width="120">
-            <template #default>
-                <el-button link type="primary" size="small" @click="handleClick">修改</el-button>
-                <el-button link type="danger" size="small">删除</el-button>
-            </template>
+              <template #default="scope">
+                  <el-button link type="primary" size="small" @click="handleClick(scope.$index, scope.row)">修改</el-button>
+                  <el-button link type="danger" size="small"  @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+              </template>
             </el-table-column>
         </el-table>
     </div>

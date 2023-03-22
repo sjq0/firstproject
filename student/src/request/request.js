@@ -126,7 +126,7 @@ export default function (fecth, url, param) {
     switch (fecth) {
       case "get":
         // console.log("begin a get request,and url:", url);
-        // console.log(url);
+        console.log(url);
         get(url, param)
           .then(function (response) {
             resolve(response);

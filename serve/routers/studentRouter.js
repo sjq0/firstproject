@@ -7,4 +7,8 @@ router.get('/addstudent',require('../api/studentindex').addStudent)
 
 router.get('/deletestudent',require('../api/studentindex').deleteStudent)
 
+router.get('/deleteonestudent',require('../api/studentindex').deleteOnestudent)
+
+router.get('/updatestudent',require('../api/studentindex').updateStudent)
+
 module.exports = router

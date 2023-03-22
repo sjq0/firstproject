@@ -45,3 +45,28 @@ exports.deleteStudent = (req, res) => {
         })
     })
 }
+
+exports.deleteOnestudent = (req,res) => {
+    console.log(req.query);
+    let { id } = req.query
+    console.log(id);
+    sql = `delete from student where id = ${id}`
+    db.query(sql,(err,result)=>{
+        res.send({
+            code: 200,
+            mage: '删除成功'
+        })
+    })
+}
+
+exports.updateStudent = (req,res) => {
+    let {id, name, age, sex, address, date } = req.query
+    console.log(id,name, age, sex, address, date);
+    sql = `update student set name='${name}',age='${age}',sex='${sex}',address='${address}',date='${date}' where id = '${id}'`
+    db.query(sql,(err ,result) => {
+        res.send({
+            code: 200,
+            mage: '修改成功'
+        })
+    })
+}

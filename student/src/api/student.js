@@ -15,9 +15,14 @@ export function deleteStudent(ids){
     return request('get',`/deletestudent`,ids)
 }
 
+//单个删除
+export function deleteOneStudent(id){
+    return request('get',`/deleteonestudent`,{id})
+}
+
 //更新学生信息
-export function updateStudent(id) {
-    return request('get',`/updatestudent?id=${id}`)
+export function updateStudent(id,student) {
+    return request('get',`/updatestudent?id=${id}`,student)
 }
 
 //搜索学生信息
